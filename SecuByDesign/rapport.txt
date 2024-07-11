@@ -1,0 +1,38 @@
+1. Enregistrement du mot de passe en clair 
+Description de la faille en mode UNSAFE :
+Mot de passe en clair : En mode UNSAFE, le mot de passe est stocké directement en clair dans la base de données sans être haché. Cela signifie que toute personne ayant accès à la base de données peut lire les mots de passe des utilisateurs sans effort.
+Différence avec le mode SAFE :
+Mot de passe haché : En mode SAFE, le mot de passe est haché avec l'algorithme pbkdf2:sha256 avant d'être stocké dans la base de données. Cela ajoute une couche de sécurité importante, rendant les mots de passe beaucoup plus difficiles à compromettre même si la base de données est exposée.
+
+2. Limite du nombre de tentatives de connexion 
+Description de la faille en mode UNSAFE :
+Protection contre la force brute : En mode UNSAFE, bien qu'il existe une tentative de limitation des tentatives de connexion, cette protection est basée sur des mots de passe stockés en clair. De plus, l'absence de hachage cohérent et de vérification de tentative rend cette protection peu fiable.
+Différence avec le mode SAFE :
+Vérification sécurisée : En mode SAFE, les mots de passe sont toujours hachés et vérifiés de manière sécurisée avec check_password_hash. Cela garantit une protection cohérente et efficace contre les tentatives de force brute.
+
+3. Emprunt multiple du même livre 
+Description de la faille en mode UNSAFE :
+Emprunt multiple : En mode UNSAFE, il est possible d'emprunter plusieurs fois le même livre, car il n'y a pas de vérification pour empêcher les emprunts multiples du même livre.
+Différence avec le mode SAFE :
+Vérification d'emprunt : En mode SAFE, une vérification est effectuée pour s'assurer qu'un livre n'est pas déjà emprunté avant d'autoriser un nouvel emprunt. Cela empêche les utilisateurs d'emprunter plusieurs fois le même livre.
+
+4. Injection SQL dans la recherche de livres 
+Description de la faille en mode UNSAFE :
+Injection SQL : En mode UNSAFE, la requête SQL pour rechercher des livres est construite en utilisant une chaîne de caractères sans aucune protection contre les injections SQL. Cela permet à un utilisateur malveillant d'exécuter des commandes SQL arbitraires en entrant des caractères spéciaux dans le champ de recherche.
+Différence avec le mode SAFE :
+Prévention des injections SQL : En mode SAFE, le paramètre de recherche est échappé à l'aide de escape, ce qui empêche les caractères spéciaux d'être interprétés comme des commandes SQL. De plus, l'utilisation de SQLAlchemy avec des filtres sécurisés empêche les injections SQL.
+
+5. XSS dans le champ de recherche 
+Description de la faille en mode UNSAFE :
+XSS : En mode UNSAFE, le paramètre de recherche n'est pas échappé, ce qui permet à un attaquant d'injecter du code JavaScript malveillant dans le champ de recherche. Ce code pourrait être exécuté par d'autres utilisateurs qui visualisent les résultats de la recherche.
+Différence avec le mode SAFE :
+Prévention des XSS : En mode SAFE, le paramètre de recherche est échappé à l'aide de escape, empêchant ainsi l'injection de code JavaScript malveillant et protégeant les utilisateurs contre les attaques XSS.
+
+6. Vérification des droits de connexion
+Description de la faille en mode UNSAFE :
+L'utilisateur à accès à la section "Emprunter" sans besoin de se connecter. Il peut faire emprunter des livres à d'autres utilisateurs en saisissant leur identifiants lors de l'emprunt et peux emprunter plusieurs fois le même livre.
+L'utilisateur à accès à la liste de tout les livres empruntés par les utilisateurs.
+
+Différence avec le mode SAFE :
+L'utilisation de session permet de vérifier que l'utilisateur soit authentifié afin de lui donner l'accès à la page "Emprunter". Une fois sur cette page, l'utilisateur ne peut emprunter des livres seulement à son nom et n'a accès qu'à la liste des livres qu'il a empruntés. 
+Il ne peut emprunter un  livre que une seule fois en même temps.

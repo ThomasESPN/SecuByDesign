@@ -1,0 +1,6 @@
+1: installer les requirements:  pip install -r requirements.txt   
+2: vider les tables: python clean_table.python
+3: lancer l'application: python run.python
+4: Créer compte utilisateur et se connecter
+
+NOTE: Nous n'avons pas réussi à gérer la connexion en mode SAFE d'un compte crée en mode UNSAFE (mdp non crypté), il faut donc créer un compte pour chaque mode.

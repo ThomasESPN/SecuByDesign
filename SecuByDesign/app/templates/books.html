@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livres</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Livres</h1>
+        <h2>Mode actuel: {{ 'SAFE' if safe_mode else 'UNSAFE' }}</h2>
+        <a href="{{ url_for('set_mode', mode='safe') }}"><button class="safe-mode">SAFE Mode</button></a>
+        <a href="{{ url_for('set_mode', mode='unsafe') }}"><button class="unsafe-mode">UNSAFE Mode</button></a>
+
+        
+        <!-- Menu de navigation -->
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Accueil</a></li>
+                <li><a href="{{ url_for('register_login') }}">S'inscrire/Se connecter</a></li>
+                <li><a href="{{ url_for('books') }}">Livres</a></li>
+                <li><a href="{{ url_for('borrow') }}">Emprunter</a></li>
+                {% if 'user_id' in session %}
+                    <li><a href="{{ url_for('logout') }}">Deconnexion</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <h3>Rechercher un livre</h3>
+        <form method="post">
+            <input type="text" name="search" placeholder="Titre du livre">
+            <button type="submit">Rechercher</button>
+        </form>
+
+        <h3>Liste des livres</h3>
+        <ul id="book-list">
+            {% for book in books %}
+                <li>ID:{{ book.id }} | {{ book.title }} by {{ book.author }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

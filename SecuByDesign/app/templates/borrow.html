@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emprunter un livre</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Emprunter un livre</h1>
+        <h2>Mode actuel: {{ 'SAFE' if safe_mode else 'UNSAFE' }}</h2>
+        <a href="{{ url_for('set_mode', mode='safe') }}"><button class="safe-mode">SAFE Mode</button></a>
+        <a href="{{ url_for('set_mode', mode='unsafe') }}"><button class="unsafe-mode">UNSAFE Mode</button></a>
+
+        
+        <!-- Menu de navigation -->
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Accueil</a></li>
+                <li><a href="{{ url_for('register_login') }}">S'inscrire/Se connecter</a></li>
+                <li><a href="{{ url_for('books') }}">Livres</a></li>
+                <li><a href="{{ url_for('borrow') }}">Emprunter</a></li>
+                {% if 'user_id' in session %}
+                    <li><a href="{{ url_for('logout') }}">Déconnexion</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <h3>Emprunter un livre</h3>
+        <form id="borrow-form">
+            <input type="number" id="user-id" placeholder="ID utilisateur" {% if safe_mode %}value="{{ session['user_id'] }}" readonly{% endif %} required>
+            <input type="number" id="book-id" placeholder="ID du livre" required>
+            <button type="submit">Emprunter</button>
+        </form>
+        
+        {% if safe_mode %}
+            <h3>Vos livres empruntés</h3>
+            <ul id="borrowed-list">
+                {% for borrow, book in borrowed_books %}
+                    <li>ID du livre: {{ book.id }} - Nom du livre: {{ book.title }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <h3>Livres empruntés par tous les utilisateurs</h3>
+            <ul id="borrowed-list">
+                {% for borrow, user, book in borrowed_books %}
+                    <li>ID du livre: {{ book.id }} - Nom du livre: {{ book.title }} - Emprunté par: {{ user.username }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
+        <script>
+            document.getElementById('borrow-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const user_id = document.getElementById('user-id').value;
+                const book_id = document.getElementById('book-id').value;
+                fetch('/borrow_book', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ user_id, book_id })
+                }).then(response => response.json()).then(data => {
+                    alert(data.message);
+                    if (data.message === 'Livre emprunté avec succès') {
+                        window.location.reload();
+                    }
+                });
+            });
+        </script>
+    </div>
+</body>
+</html>

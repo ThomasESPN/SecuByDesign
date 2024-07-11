@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S'inscrire/Se connecter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>S'inscrire/Se connecter</h1>
+        <h2>Mode actuel: {{ 'SAFE' if safe_mode else 'UNSAFE' }}</h2>
+        <a href="{{ url_for('set_mode', mode='safe') }}"><button class="safe-mode">SAFE Mode</button></a>
+        <a href="{{ url_for('set_mode', mode='unsafe') }}"><button class="unsafe-mode">UNSAFE Mode</button></a>
+
+        
+        <!-- Menu de navigation -->
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Accueil</a></li>
+                <li><a href="{{ url_for('register_login') }}">S'inscrire/Se connecter</a></li>
+                <li><a href="{{ url_for('books') }}">Livres</a></li>
+                <li><a href="{{ url_for('borrow') }}">Emprunter</a></li>
+                {% if 'user_id' in session %}
+                    <li><a href="{{ url_for('logout') }}">Déconnexion</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <h3>Inscription</h3>
+        <form id="register-form">
+            <input type="text" id="register-username" placeholder="Nom d'utilisateur" required>
+            <input type="password" id="register-password" placeholder="Mot de passe" required>
+            <button type="submit">S'inscrire</button>
+        </form>
+        <h3>Connexion</h3>
+        <form id="login-form">
+            <input type="text" id="login-username" placeholder="Nom d'utilisateur" required>
+            <input type="password" id="login-password" placeholder="Mot de passe" required>
+            <button type="submit">Se connecter</button>
+        </form>
+        <script>
+            document.getElementById('register-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('register-username').value;
+                const password = document.getElementById('register-password').value;
+                fetch('/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                }).then(response => response.json()).then(data => alert(data.message));
+            });
+
+            document.getElementById('login-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('login-username').value;
+                const password = document.getElementById('login-password').value;
+                fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                }).then(response => response.json()).then(data => {
+                    if (data.redirect) {
+                        window.location.href = data.redirect;
+                    } else {
+                        alert(data.message);
+                    }
+                });
+            });
+        </script>
+    </div>
+</body>
+</html>

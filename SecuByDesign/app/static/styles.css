@@ -1,0 +1,130 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+header, nav, section {
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3 {
+    color: #333;
+}
+
+nav {
+    background-color: #333;
+    color: white;
+    padding: 10px 0;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+form {
+    background: white;
+    padding: 20px;
+    margin: 20px auto;
+    border-radius: 5px;
+    max-width: 400px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+form input, form button {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+form button {
+    background-color: #333;
+    color: white;
+    border: none;
+}
+
+form button:hover {
+    background-color: #555;
+}
+
+ul#book-list, ul#borrowed-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul#book-list li, ul#borrowed-list li {
+    background: white;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+a {
+    color: #333;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Styles spécifiques pour les boutons SAFE et UNSAFE */
+button.safe-mode {
+    background-color: #28a745; /* Vert vif */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+button.safe-mode:hover {
+    background-color: #218838;
+}
+
+button.unsafe-mode {
+    background-color: #dc3545; /* Rouge vif */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+button.unsafe-mode:hover {
+    background-color: #c82333;
+}
